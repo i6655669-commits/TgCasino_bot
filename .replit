@@ -1,0 +1,14 @@
+modules = ["web-node"]
+run = "pnpm start"
+
+[[runners.web-node]]
+program = "pnpm"
+args = ["start"]
+
+[packager]
+language = "nodejs"
+
+[packager.features]
+packageManagement = true
+guessImports = true
+
