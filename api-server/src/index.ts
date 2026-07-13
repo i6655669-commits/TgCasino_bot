@@ -1,15 +1,32 @@
-import Express from "express";
+import app from "./app";
+import { logger } from "./lib/logger";
+import { startBot } from "./bot";
 
-const app = Express();
-const PORT = process.env.PORT || 3000;
+const rawPort = process.env["PORT"];
 
-app.use(Express.json());
+if (!rawPort) {
+  throw new Error(
+    "PORT environment variable is required but was not provided."
+  );
+}
 
-app.get("/", (req, res) => {
-  res.send("Casino TMA Bot API Server is running!");
+const port = Number(rawPort);
+
+if (Number.isNaN(port) || port <= 0) {
+  throw new Error(`Invalid PORT value: "${rawPort}"`);
+}
+
+app.listen(port, (err) => {
+  if (err) {
+    logger.error({ err }, "Error listening on port");
+    process.exit(1);
+  }
+
+  logger.info({ port }, "Server listening");
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is successfully running on port ${PORT}`);
-});
-
+if (process.env["TELEGRAM_BOT_TOKEN"]) {
+  startBot();
+} else {
+  logger.warn("TELEGRAM_BOT_TOKEN not set - Telegram bot not started");
+}
