@@ -25,8 +25,8 @@ app.listen(port, (err) => {
   logger.info({ port }, "Server listening");
 });
 
-if (process.env["TELEGRAM_BOT_TOKEN"]) {
+if (process.env["BOT_TOKEN"]) {
   startBot();
 } else {
-  logger.warn("TELEGRAM_BOT_TOKEN not set - Telegram bot not started");
+  logger.warn("BOT_TOKEN not set - Telegram bot not started");
 }
